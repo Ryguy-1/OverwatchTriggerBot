@@ -70,6 +70,6 @@ class Live_Bot:
             cv2.waitKey(100)
 
 def load_model():
-    with open('model.pickle', 'rb') as f:
+    with open('model_3.pickle', 'rb') as f:
         model = pickle.load(f)
     return model

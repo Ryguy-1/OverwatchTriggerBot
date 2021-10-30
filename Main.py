@@ -36,11 +36,11 @@ from Live_Bot import Live_Bot
 
 # Hyperparameters
 epochs = 5
-batch_size = 801
-max_each_class = 501
+batch_size = 1584
+max_each_class = 990
 
 def train_set():
-    data_loader = Dataset('Game_Data_2/', batch_size=batch_size, max_each_class=max_each_class)
+    data_loader = Dataset('Game_Data_3/', batch_size=batch_size, max_each_class=max_each_class)
     # Verify Sizes
     print(f'Data Loader Length: {len(data_loader)}')
     # Declare Model
@@ -119,7 +119,7 @@ def check_image(image, label, model):
 
 
 def save_model(model):
-    with open('model_2.pickle', 'wb') as f:
+    with open('model_3.pickle', 'wb') as f:
         pickle.dump(model, f)
 
 def gather_data():
@@ -129,5 +129,5 @@ def gather_data():
 if __name__ == '__main__':
     # gather_data()
     # train()
-    # train_set()
-    live_bot = Live_Bot()
+    train_set()
+    # live_bot = Live_Bot()

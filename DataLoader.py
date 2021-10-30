@@ -109,8 +109,11 @@ class Dataset:
         image = cv2.imread(self.x_data_locations[index])
         
         # # Testing Transforms
-        (b, g, image) = cv2.split(image)
+        # (b, g, image) = cv2.split(image)
         image = image[round(self.y_res*2/5):round(self.y_res*3/5), round(self.x_res*2/5):round(self.x_res*3/5)]
+
+        # cv2.imshow('image', image)
+        # cv2.waitKey(0)
 
         # Reshape Image
         image = image.reshape(1, -1)
@@ -167,7 +170,7 @@ class Dataset:
             image = cv2.imread(self.test_x_locations[i])
 
             # Testing Transforms
-            (b, g, image) = cv2.split(image)
+            # (b, g, image) = cv2.split(image)
             image = image[round(self.y_res*2/5):round(self.y_res*3/5), round(self.x_res*2/5):round(self.x_res*3/5)]
 
             # Reshape Image
