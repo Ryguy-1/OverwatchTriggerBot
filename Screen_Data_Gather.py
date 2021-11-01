@@ -6,7 +6,7 @@ import mouse
 
 
 class ScreenRecord:
-    def __init__(self, screen_resolution={'left': 0, 'top': 0, 'width': 1920, 'height': 1080}, save_data='Game_Data_3/', frame_delay=100):
+    def __init__(self, screen_resolution={'left': 0, 'top': 0, 'width': 1920, 'height': 1080}, save_data='Game_Data_4/', frame_delay=100):
         # Save Data Path
         self.save_data = save_data
         # Screen Resolution

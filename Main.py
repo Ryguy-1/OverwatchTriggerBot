@@ -33,14 +33,21 @@ import pickle
 # Live Bot
 from Live_Bot import Live_Bot
 
+# Model 1 -> Soldier
+# Model 2 -> Widow
+# Model 3 -> Cree
+# Model 4 -> Cree Long (Lots of Data) -> Pretty good too => About 78 percent accuracy
+# Model 5 -> Tracer Game Model
+# Model 6 -> 
+
 
 # Hyperparameters
 epochs = 5
-batch_size = 1584
-max_each_class = 990
+batch_size = 4138
+max_each_class = 2299
 
 def train_set():
-    data_loader = Dataset('Game_Data_3/', batch_size=batch_size, max_each_class=max_each_class)
+    data_loader = Dataset('Game_Data_4/', batch_size=batch_size, max_each_class=max_each_class)
     # Verify Sizes
     print(f'Data Loader Length: {len(data_loader)}')
     # Declare Model
@@ -51,6 +58,8 @@ def train_set():
     print(len(train_y))
 
     model = LogisticRegression(random_state=0, solver='lbfgs', multi_class='multinomial', verbose=1) # verbose=1
+    # model = SGDClassifier(random_state=0, loss='log', penalty='l2') # verbose=1
+    # model = DecisionTreeClassifier(random_state=0, max_depth=5)
     model.fit(train_x, train_y)
 
     save_model(model)
@@ -62,7 +71,7 @@ def train_set():
 
 def train():
     
-    data_loader = Dataset('Game_Data_2/', batch_size=batch_size, max_each_class=max_each_class)
+    data_loader = Dataset('Game_Data_4/', batch_size=batch_size, max_each_class=max_each_class)
     # Verify Sizes
     print(f'Data Loader Length: {len(data_loader)}')
     # Declare Model
@@ -119,15 +128,17 @@ def check_image(image, label, model):
 
 
 def save_model(model):
-    with open('model_3.pickle', 'wb') as f:
+    with open('model_6.pickle', 'wb') as f:
         pickle.dump(model, f)
 
 def gather_data():
-    screen_record = ScreenRecord()
+    screen_record = ScreenRecord(save_data='Game_Data_5/')
     screen_record.start_recording()
 
 if __name__ == '__main__':
     # gather_data()
     # train()
-    train_set()
-    # live_bot = Live_Bot()
+    # train_set()
+    live_bot = Live_Bot()
+
+

@@ -13,7 +13,7 @@ class Dataset:
 
     # Min Number of Files in Each Class = 1000
 
-    def __init__(self, recaptcha_data_location, batch_size=32, max_each_class=1000, train_percent = 0.8, resolution = (1920, 1080)):
+    def __init__(self, recaptcha_data_location, scalar_location = 'scalar_6.pickle', batch_size=32, max_each_class=1000, train_percent = 0.9, resolution = (1920, 1080)):
         self.recaptcha_data_location = recaptcha_data_location
 
         # Initialize 
@@ -23,6 +23,7 @@ class Dataset:
         self.train_percent = train_percent
         self.x_res = resolution[0]
         self.y_res = resolution[1]
+        self.scalar_location = scalar_location
 
         # Initialize x data locations and y labels
         self.x_data_locations = []
@@ -58,7 +59,8 @@ class Dataset:
         self.x_data_locations = self.x_data_locations[:int(len(self.x_data_locations)*self.train_percent)]
         self.y_labels = self.y_labels[:int(len(self.y_labels)*self.train_percent)]
         # Calculate Scalar of Train Data
-        # self.calculate_scalar()
+        self.calculate_scalar()
+        save_scalar(self.scalar, self.scalar_location)
 
         print(np.array(self.x_data_locations).shape)
         print(np.array(self.y_labels).shape)
@@ -111,6 +113,7 @@ class Dataset:
         # # Testing Transforms
         # (b, g, image) = cv2.split(image)
         image = image[round(self.y_res*2/5):round(self.y_res*3/5), round(self.x_res*2/5):round(self.x_res*3/5)]
+        # b, g, image = cv2.split(image)
 
         # cv2.imshow('image', image)
         # cv2.waitKey(0)
@@ -118,7 +121,7 @@ class Dataset:
         # Reshape Image
         image = image.reshape(1, -1)
         # Normalize Image
-        # image = self.scalar.transform(image)     
+        image = self.scalar.transform(image)     
 
         # Flatten image to get rid of arbitrary first dimension after we transform the image
         image = image.flatten() 
@@ -136,11 +139,11 @@ class Dataset:
             image = cv2.imread(x_location)
 
             # Testing Transforms
-            image = cv2.resize(image, self.resize_size)
+            image = image[round(self.y_res*2/5):round(self.y_res*3/5), round(self.x_res*2/5):round(self.x_res*3/5)]
 
             x_data.append(image.flatten())
             loaded_counter += 1
-            if loaded_counter % 1000 == 0:
+            if loaded_counter % 100 == 0:
                 print('Loaded ' + str(loaded_counter) + ' images')
         print('Calculating Scalar')
         # Calculate Scalar
@@ -172,11 +175,12 @@ class Dataset:
             # Testing Transforms
             # (b, g, image) = cv2.split(image)
             image = image[round(self.y_res*2/5):round(self.y_res*3/5), round(self.x_res*2/5):round(self.x_res*3/5)]
+            # b, g, image = cv2.split(image)
 
             # Reshape Image
             image = image.reshape(1, -1)
             # Normalize Image
-            # image = self.scalar.transform(image)
+            image = self.scalar.transform(image)
 
             # Flatten Image
             image = image.flatten()
@@ -192,3 +196,8 @@ class Dataset:
         self.current_index = 0
         # Shuffle Data after each epoch
         self.shuffle_data()
+
+
+def save_scalar(scalar, scalar_location):
+    with open(scalar_location, 'wb') as f:
+        pickle.dump(scalar, f)
